@@ -18,6 +18,7 @@ export interface PeerInfo {
   address?: string
   udpPort?: number | null
   tcpPort?: number | null
+  type?: number | 3
 }
 
 export interface DPTOptions {
