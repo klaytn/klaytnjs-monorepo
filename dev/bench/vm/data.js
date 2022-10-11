@@ -1,67 +1,8 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1646271858868,
-  "repoUrl": "https://github.com/ethereumjs/ethereumjs-monorepo",
+  "lastUpdate": 1665476435971,
+  "repoUrl": "https://github.com/klaytn/klaytnjs-monorepo",
   "entries": {
     "Benchmark": [
-      {
-        "commit": {
-          "author": {
-            "email": "17355484+acolytec3@users.noreply.github.com",
-            "name": "acolytec3",
-            "username": "acolytec3"
-          },
-          "committer": {
-            "email": "noreply@github.com",
-            "name": "GitHub",
-            "username": "web-flow"
-          },
-          "distinct": true,
-          "id": "6bb2f23047112e3a984e98e5a2ee6bb449b08d48",
-          "message": "Client: Add tests to verify shutdown (#1641)\n\n* Add tests to verify client shutdown\r\n\r\n* Add libp2p test\r\n\r\n* Address feedback\r\n\r\n* most libp2p into separate file",
-          "timestamp": "2022-01-18T09:59:54+01:00",
-          "tree_id": "252885a906432a910769a3dbd142781f62692eee",
-          "url": "https://github.com/ethereumjs/ethereumjs-monorepo/commit/6bb2f23047112e3a984e98e5a2ee6bb449b08d48"
-        },
-        "date": 1642496696631,
-        "tool": "benchmarkjs",
-        "benches": [
-          {
-            "name": "Block 9422905",
-            "value": 14269,
-            "range": "±7.35%",
-            "unit": "ops/sec",
-            "extra": "71 samples"
-          },
-          {
-            "name": "Block 9422906",
-            "value": 15998,
-            "range": "±2.57%",
-            "unit": "ops/sec",
-            "extra": "78 samples"
-          },
-          {
-            "name": "Block 9422907",
-            "value": 10696,
-            "range": "±16.34%",
-            "unit": "ops/sec",
-            "extra": "56 samples"
-          },
-          {
-            "name": "Block 9422908",
-            "value": 15453,
-            "range": "±2.54%",
-            "unit": "ops/sec",
-            "extra": "77 samples"
-          },
-          {
-            "name": "Block 9422910",
-            "value": 15929,
-            "range": "±2.60%",
-            "unit": "ops/sec",
-            "extra": "79 samples"
-          }
-        ]
-      },
       {
         "commit": {
           "author": {
@@ -1770,6 +1711,65 @@ window.BENCHMARK_DATA = {
             "range": "±2.81%",
             "unit": "ops/sec",
             "extra": "76 samples"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jack.jin@krustuniverse.com",
+            "name": "jack",
+            "username": "kjeom"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8f7390eae03733d6cd392afd71f8bdfac2714605",
+          "message": "Merge pull request #1 from kjeom/master\n\nKlaytn P2P protocol",
+          "timestamp": "2022-10-11T17:15:24+09:00",
+          "tree_id": "0ebca9f698e4702a3e714671fe968c4e9c841d92",
+          "url": "https://github.com/klaytn/klaytnjs-monorepo/commit/8f7390eae03733d6cd392afd71f8bdfac2714605"
+        },
+        "date": 1665476435236,
+        "tool": "benchmarkjs",
+        "benches": [
+          {
+            "name": "Block 9422905",
+            "value": 19995,
+            "range": "±6.52%",
+            "unit": "ops/sec",
+            "extra": "76 samples"
+          },
+          {
+            "name": "Block 9422906",
+            "value": 21115,
+            "range": "±1.97%",
+            "unit": "ops/sec",
+            "extra": "79 samples"
+          },
+          {
+            "name": "Block 9422907",
+            "value": 16845,
+            "range": "±14.57%",
+            "unit": "ops/sec",
+            "extra": "64 samples"
+          },
+          {
+            "name": "Block 9422908",
+            "value": 20152,
+            "range": "±1.85%",
+            "unit": "ops/sec",
+            "extra": "76 samples"
+          },
+          {
+            "name": "Block 9422910",
+            "value": 20130,
+            "range": "±4.18%",
+            "unit": "ops/sec",
+            "extra": "75 samples"
           }
         ]
       }
