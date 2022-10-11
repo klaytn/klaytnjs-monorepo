@@ -61,6 +61,8 @@ const endpoint = {
       address.encode(obj.address!),
       port.encode(obj.udpPort ?? null),
       port.encode(obj.tcpPort ?? null),
+      // TODO: Update to use variable for 'type' field, currently using static value '3', which means EN type.
+      int2buffer(3),
     ]
   },
   decode: function (payload: Buffer[]): PeerInfo {
@@ -68,15 +70,17 @@ const endpoint = {
       address: address.decode(payload[0]),
       udpPort: port.decode(payload[1]),
       tcpPort: port.decode(payload[2]),
+      type: buffer2int(payload[3]),
     }
   },
 }
 
-type InPing = { [0]: Buffer; [1]: Buffer[]; [2]: Buffer[]; [3]: Buffer }
-type OutPing = { version: number; from: PeerInfo; to: PeerInfo; timestamp: number }
+type InPing = { [0]: Buffer; [1]: Buffer; [2]: Buffer[]; [3]: Buffer[]; [4]: Buffer }
+type OutPing = { networkID: number, version: number; from: PeerInfo; to: PeerInfo; timestamp: number }
 const ping = {
   encode: function (obj: OutPing): InPing {
     return [
+      int2buffer(obj.networkID),
       int2buffer(obj.version),
       endpoint.encode(obj.from),
       endpoint.encode(obj.to),
@@ -85,10 +89,11 @@ const ping = {
   },
   decode: function (payload: InPing): OutPing {
     return {
-      version: buffer2int(payload[0]),
-      from: endpoint.decode(payload[1]),
-      to: endpoint.decode(payload[2]),
-      timestamp: timestamp.decode(payload[3]),
+      networkID: buffer2int(payload[0]),
+      version: buffer2int(payload[1]),
+      from: endpoint.decode(payload[2]),
+      to: endpoint.decode(payload[3]),
+      timestamp: timestamp.decode(payload[4]),
     }
   },
 }
@@ -108,35 +113,39 @@ const pong = {
   },
 }
 
-type OutFindMsg = { id: string; timestamp: number }
-type InFindMsg = { [0]: string; [1]: Buffer }
+type OutFindMsg = { id: string; type: number, timestamp: number }
+type InFindMsg = { [0]: string; [1]: Buffer; [2]: Buffer }
 const findneighbours = {
   encode: function (obj: OutFindMsg): InFindMsg {
-    return [obj.id, timestamp.encode(obj.timestamp)]
+    // TODO: Update to use variable for 'type' field, currently using static value '3', which means EN type.
+    return [obj.id, int2buffer(3), timestamp.encode(obj.timestamp)]
   },
   decode: function (payload: InFindMsg): OutFindMsg {
     return {
       id: payload[0],
-      timestamp: timestamp.decode(payload[1]),
+      type: buffer2int(payload[1]),
+      timestamp: timestamp.decode(payload[2]),
     }
   },
 }
 
-type InNeighborMsg = { peers: PeerInfo[]; timestamp: number }
-type OutNeighborMsg = { [0]: Buffer[][]; [1]: Buffer }
+type InNeighborMsg = { type: number, peers: PeerInfo[]; timestamp: number }
+type OutNeighborMsg = { [0]: Buffer; [1]: Buffer[][]; [2]: Buffer }
 const neighbours = {
   encode: function (obj: InNeighborMsg): OutNeighborMsg {
     return [
+      int2buffer(obj.type),
       obj.peers.map((peer: PeerInfo) => endpoint.encode(peer).concat(peer.id! as Buffer)),
       timestamp.encode(obj.timestamp),
     ]
   },
   decode: function (payload: OutNeighborMsg): InNeighborMsg {
     return {
-      peers: payload[0].map((data) => {
+      type: buffer2int(payload[0]),
+      peers: payload[1].map((data) => {
         return { endpoint: endpoint.decode(data), id: data[3] } // hack for id
       }),
-      timestamp: timestamp.decode(payload[1]),
+      timestamp: timestamp.decode(payload[2]),
     }
   },
 }

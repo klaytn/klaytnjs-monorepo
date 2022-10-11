@@ -11,6 +11,7 @@ import { Socket as DgramSocket, RemoteInfo } from 'dgram'
 const DEBUG_BASE_NAME = 'dpt:server'
 const verbose = createDebugLogger('verbose').enabled
 
+const NETWORK_ID = 8217
 const VERSION = 0x04
 
 export interface DPTServerOptions {
@@ -54,7 +55,8 @@ export class Server extends EventEmitter {
     this._privateKey = privateKey
 
     this._timeout = options.timeout ?? ms('10s')
-    this._endpoint = options.endpoint ?? { address: '0.0.0.0', udpPort: null, tcpPort: null }
+    // TODO: Update to use variable for 'type' field, currently using static value '3', which means EN type.
+    this._endpoint = options.endpoint ?? { address: '0.0.0.0', udpPort: null, tcpPort: null, type: 3 }
     this._requests = new Map()
     this._parityRequestMap = new Map()
     this._requestsCache = new LRUCache({ max: 1000, maxAge: ms('1s'), stale: false })
@@ -101,6 +103,7 @@ export class Server extends EventEmitter {
     if (promise !== undefined) return promise
 
     const hash = this._send(peer, 'ping', {
+      networkID: NETWORK_ID,
       version: VERSION,
       from: this._endpoint,
       to: peer,
@@ -184,12 +187,17 @@ export class Server extends EventEmitter {
           id: peerId,
           udpPort: rinfo.port,
           address: rinfo.address,
+          // TODO: Update to use variable for 'type' field, currently using static value '3', which means EN type.
+          type: 3,
         }
         this._send(remote, 'pong', {
           to: {
+            id: peerId,
             address: rinfo.address,
             udpPort: rinfo.port,
             tcpPort: info.data.from.tcpPort,
+            // TODO: Update to use variable for 'type' field, currently using static value '3', which means EN type.
+            type: 3,
           },
           hash: msg.slice(0, 32),
         })
@@ -211,6 +219,8 @@ export class Server extends EventEmitter {
             address: request.peer.address,
             udpPort: request.peer.udpPort,
             tcpPort: request.peer.tcpPort,
+            // TODO: Update to use variable for 'type' field, currently using static value '3', which means EN type.
+            type: 3,
           })
         }
         break
@@ -220,6 +230,8 @@ export class Server extends EventEmitter {
           id: peerId,
           udpPort: rinfo.port,
           address: rinfo.address,
+          // TODO: Update to use variable for 'type' field, currently using static value '3', which means EN type.
+          type: 3,
         }
         this._send(remote, 'neighbours', {
           peers: this._dpt.getClosestPeers(info.data.id),
